@@ -3,47 +3,7 @@
 #include "sgmath.h"
 
 SGE_BEGIN_MATH_NAMESPACE
-
-/////////////////////////////////////////////////////////////////
-//
-/////////////////////////////////////////////////////////////////
-#define SGM_TVEC_OPERATOR_SCALE_VECTOR(VEC_TYPE)							\
-template<typename TDATA_TYPE> VEC_TYPE<TDATA_TYPE> 							\
-	operator*( const TDATA_TYPE& s, const VEC_TYPE<TDATA_TYPE>& d)			\
-{																			\
-	return d * s;															\
-}
-
-#define SGM_TVEC_DEFINE_BASIC_OPS(TVEC)				\
-template<class T>									\
-T dot(const TVEC<T>& a, const TVEC<T>& b)			\
-{													\
-	return a.dot(b);								\
-}													\
-template<class T>									\
-T length(const TVEC<T>& a)							\
-{													\
-	return a.length();								\
-}													\
-template<class T>									\
-TVEC<T> normalized(const TVEC<T>& a)				\
-{													\
-	return a.normalized();							\
-}													\
-template<class T>									\
-TVEC<T> reflect(const TVEC<T>& i, const TVEC<T>& n)	\
-{													\
-	return i.reflect(n);							\
-}													\
-template<class T>									\
-TVEC<T> refract(									\
-const TVEC<T>& i,									\
-const TVEC<T>& n,									\
-const typename TVEC<T>::DATA_TYPE& eta)				\
-{													\
-	return i.refract(n, eta);						\
-}													
-
+									
 /////////////////////////////////////////////////////////////////
 //2D vector
 /////////////////////////////////////////////////////////////////
@@ -78,11 +38,8 @@ struct vec2
 	{ }
 
 #include "vec_common.inl"
-	
-};
 
-SGM_TVEC_OPERATOR_SCALE_VECTOR(vec2)
-SGM_TVEC_DEFINE_BASIC_OPS(vec2)
+};
 
 /////////////////////////////////////////////////////////////////
 //3D vector
@@ -129,17 +86,18 @@ struct vec3
 
 		return SELF_TYPE(x, y, z);
 	}
+									
+	friend vec3 corss(const vec3& a, const vec3& b)
+	{
+		return a.cross(b);
+	}
+
+	friend vec3 triple(const vec3& v, const vec3& a, const vec3& b)
+	{
+		return dot(v, cross(a,b));
+	}
 
 };
-
-SGM_TVEC_OPERATOR_SCALE_VECTOR(vec3)
-SGM_TVEC_DEFINE_BASIC_OPS(vec3)
-
-template<class T>									
-vec3<T> corss(const vec3<T>& a, const vec3<T>& b)
-{
-	return a.cross(b);
-}
 
 /////////////////////////////////////////////////////////////////
 //4D vector
@@ -180,16 +138,27 @@ struct vec4
 
 };
 
-SGM_TVEC_OPERATOR_SCALE_VECTOR(vec4)
-SGM_TVEC_DEFINE_BASIC_OPS(vec4)
+/////////////////////////////////////////////////////////////////
+//vec_n vector
+/////////////////////////////////////////////////////////////////
+template<typename TDATA_TYPE, unsigned int TNUM_ELEMS>
+struct vec_n
+{
+	typedef TDATA_TYPE DATA_TYPE;
+	typedef vec_n SELF_TYPE;
+	static const unsigned int NUM_ELEMS = TNUM_ELEMS;
+
+	DATA_TYPE d[NUM_ELEMS];
+
+	vec_n() { }
+
+#include "vec_common.inl"
+
+};
 
 /////////////////////////////////////////////////////////////////
-//Cleanup all the macros
+//
 /////////////////////////////////////////////////////////////////
-
-#undef SGM_TVEC_OPERATOR_SCALE_VECTOR
-#undef SGM_TVEC_DEFINE_BASIC_OPS
-
 typedef vec2<int>			vec2i;
 typedef vec2<unsigned int>	vec2u;
 typedef vec2<float>			vec2f;
@@ -205,10 +174,14 @@ typedef vec4<unsigned int>	vec4u;
 typedef vec4<float>			vec4f;
 typedef vec4<double>		vec4d;
 
+
+/////////////////////////////////////////////////////////////////
+//
+/////////////////////////////////////////////////////////////////
 template <typename T, unsigned int N>
 struct vec_type_picker
 {
-
+	typedef vec_n<T,N>	value;
 };
 
 template <typename T>

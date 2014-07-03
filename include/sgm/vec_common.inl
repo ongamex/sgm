@@ -66,6 +66,17 @@ SELF_TYPE operator-(const SELF_TYPE& v) const
 }
 
 //---------------------------------------------------------
+SELF_TYPE operator*(const SELF_TYPE& v) const
+{
+	SELF_TYPE r;
+	for(unsigned int t = 0; t < NUM_ELEMS, ++t)
+	{
+		r[t] = d[t] - v[t];
+	}
+	return;
+}
+
+//---------------------------------------------------------
 SELF_TYPE operator*(const DATA_TYPE& s) const
 {
 	SELF_TYPE r;
@@ -74,6 +85,11 @@ SELF_TYPE operator*(const DATA_TYPE& s) const
 		r[t] = d[t] * s;
 	}
 	return r;
+}
+
+friend SELF_TYPE operator*(const DATA_TYPE& s, const SELF_TYPE& v)
+{
+	return v * s;
 }
 
 //---------------------------------------------------------
@@ -196,4 +212,32 @@ SELF_TYPE refract(const SELF_TYPE& normal, const DATA_TYPE& eta) const
 		return SELF_TYPE(zero);
 	else
 		return (*this) * eta - (eta * p + sgm::sqrt(k)) * normal;
+}
+
+//---------------------------------------------------------
+//global operators
+//---------------------------------------------------------									
+friend DATA_TYPE dot(const SELF_TYPE& a, const SELF_TYPE& b)			
+{													
+	return a.dot(b);								
+}			
+								
+friend DATA_TYPE length(const SELF_TYPE& a)							
+{													
+	return a.length();								
+}													
+									
+friend SELF_TYPE normalized(const SELF_TYPE& a)				
+{													
+	return a.normalized();							
+}		
+
+friend SELF_TYPE reflect(const SELF_TYPE& incident, const SELF_TYPE& normal)	
+{													
+	return incident.reflect(normal);							
+}			
+
+friend SELF_TYPE refract(const SELF_TYPE& inc, const SELF_TYPE& n, DATA_TYPE& eta)				
+{													
+	return i.refract(n, eta);
 }
