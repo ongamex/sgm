@@ -10,6 +10,8 @@ source_group("sgm" FILES
 ../include/sgm/vec.h
 ../include/sgm/vec_common.inl
 ../include/sgm/mat.h
+../include/sgm/mat_common.inl
+../include/sgm/quat.h
 )
 
 add_executable(sgmdev 
@@ -18,4 +20,6 @@ main.cpp
 ../include/sgm/sgmath.h
 ../include/sgm/vec.h
 ../include/sgm/vec_common.inl
-../include/sgm/mat.h )
+../include/sgm/mat.h
+../include/sgm/mat_common.inl
+../include/sgm/quat.h )

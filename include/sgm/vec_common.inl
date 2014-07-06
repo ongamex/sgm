@@ -1,12 +1,18 @@
 /////////////////////////////////////////////////////////////////
-//This inl file should be only used in vec.h
-//All methods that are written here must be applicable for all
-//vec classes (vec2, vec3, vec4, vecN)
+//This *.inl contains common vector operation.
+//The file is shared between several vector classes.
+//Each class that uses that file should have defined as members:
+//
+//SELF_TYPE - typedev <CLASS_NAME> SELF_TYPE;
+//DATA_TYPE - the data storage type
+//data[] - an array of type DATA_TYPE with size NUM_ELEMS
+//NUM_ELEMS - the number of storage elements (unsigned int)
+//
 /////////////////////////////////////////////////////////////////
 
-/////////////////////////////////////////////////////////////////
-//Static members
-/////////////////////////////////////////////////////////////////
+//-----------------------------------------------------------
+//gets and identity axis
+//-----------------------------------------------------------
 static SELF_TYPE get_axis(const unsigned int& axisIndex, const DATA_TYPE& axisLen = DATA_TYPE(1.0))
 {
 	SELF_TYPE result;
@@ -18,6 +24,9 @@ static SELF_TYPE get_axis(const unsigned int& axisIndex, const DATA_TYPE& axisLe
 	return result;
 }
 
+//-----------------------------------------------------------
+//zero vector
+//-----------------------------------------------------------
 static SELF_TYPE get_zero()
 {
 	SELF_TYPE result;
@@ -29,60 +38,75 @@ static SELF_TYPE get_zero()
 	return result;
 }
 
-/////////////////////////////////////////////////////////////////
-//other member methods
-/////////////////////////////////////////////////////////////////
-DATA_TYPE& operator[](const unsigned int t)
+//-----------------------------------------------------------
+//operator[]
+//-----------------------------------------------------------
+DATA_TYPE&			operator[](const unsigned int t)		{ return data[t]; }
+const DATA_TYPE&	operator[](const unsigned int t) const	{ return data[t]; }
+
+//-----------------------------------------------------------
+// Vector + Vector
+//-----------------------------------------------------------
+SELF_TYPE& operator+=(const SELF_TYPE& v)
 {
-	return d[t];
+	for(unsigned int t = 0; t < NUM_ELEMS; ++t)
+	{
+		data[t] += v[t];
+	}
+	return *this;
 }
 
-//---------------------------------------------------------
-const DATA_TYPE& operator[](const unsigned int t) const
-{
-	return d[t];
-}
-
-//---------------------------------------------------------
 SELF_TYPE operator+(const SELF_TYPE& v) const
 {
 	SELF_TYPE r;
 	for(unsigned int t = 0; t < NUM_ELEMS; ++t)
 	{
-		r[t] = d[t] + v[t];
+		r[t] = data[t] + v[t];
 	}
 	return r;
 }
 
 //---------------------------------------------------------
+//Vector - Vector
+//---------------------------------------------------------
+SELF_TYPE& operator-=(const SELF_TYPE& v)
+{
+	for(unsigned int t = 0; t < NUM_ELEMS; ++t)
+	{
+		data[t] -= v[t];
+	}
+	return *this;
+}
+
+
 SELF_TYPE operator-(const SELF_TYPE& v) const
 {
 	SELF_TYPE r;
 	for(unsigned int t = 0; t < NUM_ELEMS; ++t)
 	{
-		r[t] = d[t] - v[t];
+		r[t] = data[t] - v[t];
 	}
 	return r;
 }
 
 //---------------------------------------------------------
-SELF_TYPE operator*(const SELF_TYPE& v) const
+//Vector * Scalar (and vice versa)
+//---------------------------------------------------------
+SELF_TYPE& operator*=(const DATA_TYPE& s)
 {
-	SELF_TYPE r;
-	for(unsigned int t = 0; t < NUM_ELEMS, ++t)
+	for(unsigned int t = 0; t < NUM_ELEMS; ++t)
 	{
-		r[t] = d[t] - v[t];
+		data[t] *= s;
 	}
-	return;
+	return *this;
 }
 
-//---------------------------------------------------------
 SELF_TYPE operator*(const DATA_TYPE& s) const
 {
 	SELF_TYPE r;
 	for(unsigned int t = 0; t < NUM_ELEMS; ++t)
 	{
-		r[t] = d[t] * s;
+		r[t] = data[t] * s;
 	}
 	return r;
 }
@@ -93,50 +117,53 @@ friend SELF_TYPE operator*(const DATA_TYPE& s, const SELF_TYPE& v)
 }
 
 //---------------------------------------------------------
-SELF_TYPE& operator+=(const SELF_TYPE& v)
-{
-	for(unsigned int t = 0; t < NUM_ELEMS; ++t)
-	{
-		d[t] += v[t];
-	}
-	return *this;
-}
-
+//componentwise multiplication
 //---------------------------------------------------------
-SELF_TYPE& operator-(const SELF_TYPE& v)
+friend SELF_TYPE cmul(const SELF_TYPE& a, const const SELF_TYPE& b)
 {
 	SELF_TYPE r;
 	for(unsigned int t = 0; t < NUM_ELEMS; ++t)
 	{
-		d[t] -= v[t];
-	}
-	return *this;
-}
-
-//---------------------------------------------------------
-SELF_TYPE& operator*=(const DATA_TYPE& s)
-{
-	SELF_TYPE r;
-	for(unsigned int t = 0; t < NUM_ELEMS; ++t)
-	{
-		d[t] *= s;
-	}
-	return *this;
-}
-
-//---------------------------------------------------------
-DATA_TYPE hsum() const
-{
-	DATA_TYPE r = d[0];
-	for(unsigned int t = 1; t < NUM_ELEMS; ++t)
-	{
-		r += d[t];
+		r[t] = data[t] * v[t];
 	}
 	return r;
 }
 
 //---------------------------------------------------------
-SELF_TYPE min_components(const SELF_TYPE& v) const
+//componentwise division
+//---------------------------------------------------------
+friend SELF_TYPE cdiv(const SELF_TYPE& a, const const SELF_TYPE& b)
+{
+	SELF_TYPE r;
+	for(unsigned int t = 0; t < NUM_ELEMS; ++t)
+	{
+		r[t] = data[t] / v[t];
+	}
+	return r;
+}
+
+//---------------------------------------------------------
+//Horizontal sum
+//---------------------------------------------------------
+DATA_TYPE hsum() const
+{
+	DATA_TYPE r = data[0];
+	for(unsigned int t = 1; t < NUM_ELEMS; ++t)
+	{
+		r += data[t];
+	}
+	return r;
+}
+
+friend DATA_TYPE hsum(const SELF_TYPE& v)
+{
+	return v.hsum();
+}
+
+//---------------------------------------------------------
+//min components
+//---------------------------------------------------------
+SELF_TYPE component_min(const SELF_TYPE& v) const
 {
 	SELF_TYPE r;
 	for(unsigned int t = 0; t < NUM_ELEMS; ++t)
@@ -146,8 +173,15 @@ SELF_TYPE min_components(const SELF_TYPE& v) const
 	return r;
 }
 
+friend SELF_TYPE component_min(const SELF_TYPE& a, const const SELF_TYPE& b)
+{
+	a.component_min(b);
+}
+
 //---------------------------------------------------------
-SELF_TYPE max_components(const SELF_TYPE& v) const
+//max
+//---------------------------------------------------------
+SELF_TYPE component_max(const SELF_TYPE& v) const
 {
 	SELF_TYPE r;
 	for(unsigned int t = 0; t < NUM_ELEMS; ++t)
@@ -157,29 +191,49 @@ SELF_TYPE max_components(const SELF_TYPE& v) const
 	return r;
 }
 
+friend SELF_TYPE component_max(const SELF_TYPE& a, const const SELF_TYPE& b)
+{
+	a.component_max(b);
+}
+
+//---------------------------------------------------------
+//Dot product
 //---------------------------------------------------------
 DATA_TYPE dot(const SELF_TYPE& v) const
 {
-	DATA_TYPE r = d[0] * v[0];
+	DATA_TYPE r = data[0] * v[0];
 	for(unsigned int t = 1; t < NUM_ELEMS; ++t)
 	{
-		r += d[t] * v[t];
+		r += data[t] * v[t];
 	}
 	return r;
 }
 
+friend DATA_TYPE dot(const SELF_TYPE& a, const SELF_TYPE& b)
+{
+	return a.dot(b);
+}
+
 //---------------------------------------------------------
-DATA_TYPE lengthSqr() const
+//length
+//---------------------------------------------------------
+DATA_TYPE length_sqr() const
 {
 	return dot(*this);
 }
 
-//---------------------------------------------------------
 DATA_TYPE length() const
 {
-	return sgm::sqrt(lengthSqr());
+	return sgm::sqrt(length_sqr());
 }
 
+friend DATA_TYPE length(const SELF_TYPE& v)
+{
+	return v.length();
+}
+
+//---------------------------------------------------------
+//normalized
 //---------------------------------------------------------
 SELF_TYPE normalized() const
 {
@@ -188,18 +242,31 @@ SELF_TYPE normalized() const
 	SELF_TYPE result;
 	for(unsigned int t = 0; t < SELF_TYPE::NUM_ELEMS; ++t)
 	{
-		result[t] = d[t] * invLength;
+		result[t] = data[t] * invLength;
 	}
 
 	return result;
 }
 
+friend DATA_TYPE normalized(const SELF_TYPE& v)
+{
+	return v.normalized();
+}
+
+//---------------------------------------------------------
+//reflect
 //---------------------------------------------------------
 SELF_TYPE reflect(const SELF_TYPE& normal) const
 {
 	return (*this) + DATA_TYPE(2.0) * dot(normal) * normal;
 }
 
+friend DATA_TYPE normalized(const SELF_TYPE& incident, const SELF_TYPE& normal)
+{
+	return incident.reflect(normal);
+}
+//---------------------------------------------------------
+//refract
 //---------------------------------------------------------
 SELF_TYPE refract(const SELF_TYPE& normal, const DATA_TYPE& eta) const
 {
@@ -213,29 +280,6 @@ SELF_TYPE refract(const SELF_TYPE& normal, const DATA_TYPE& eta) const
 	else
 		return (*this) * eta - (eta * p + sgm::sqrt(k)) * normal;
 }
-
-//---------------------------------------------------------
-//global operators
-//---------------------------------------------------------									
-friend DATA_TYPE dot(const SELF_TYPE& a, const SELF_TYPE& b)			
-{													
-	return a.dot(b);								
-}			
-								
-friend DATA_TYPE length(const SELF_TYPE& a)							
-{													
-	return a.length();								
-}													
-									
-friend SELF_TYPE normalized(const SELF_TYPE& a)				
-{													
-	return a.normalized();							
-}		
-
-friend SELF_TYPE reflect(const SELF_TYPE& incident, const SELF_TYPE& normal)	
-{													
-	return incident.reflect(normal);							
-}			
 
 friend SELF_TYPE refract(const SELF_TYPE& inc, const SELF_TYPE& n, DATA_TYPE& eta)				
 {													

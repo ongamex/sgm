@@ -1,134 +1,164 @@
 //---------------------------------------------------
+//
+//---------------------------------------------------
 DATA_TYPE& at(unsigned const int r, const unsigned int c)
 {
-	return axis[r][c];
+	return data[r][c];
 }
 
-//---------------------------------------------------
 const DATA_TYPE& at(unsigned const int r, const unsigned int c) const
 {
-	return axis[r][c];
+	return data[r][c];
 }
 
-//---------------------------------------------------
 void identify_axis(const unsigned int i)
 {
-	rows[i] = SELF_TYPE::get_axis(i);
+	data[i] = VEC_TYPE::get_axis(i);
 }
 
 //---------------------------------------------------
-void identify_axis_safe(const unsigned int i)
-{
-	if(i < NUM_ROW) rows[i] = SELF_TYPE::get_axis(i);
-}
-
+//Scalars operator* and *=
 //---------------------------------------------------
 SELF_TYPE operator*(const DATA_TYPE& s) const 
 {
 	SELF_TYPE result;
 	for(unsigned int t = 0; t < NUM_VECS; ++t)
 	{
-		result[t] = axis[t] * s;
+		result[t] = data[t] * s;
 	}
 	return result;
 }
 
-//---------------------------------------------------
+friend SELF_TYPE operator*(const DATA_TYPE& s, const SELF_TYPE& m)
+{
+	return m * s;
+}
+
 SELF_TYPE& operator*=(const SELF_TYPE& s) 
 {
 	SELF_TYPE result;
 	for(unsigned int t = 0; t < NUM_VECS; ++t)
 	{
-		axis[t] *= s;
+		data[t] *= s;
 	}
 	return *this;
 }
 
+//---------------------------------------------------
+//operator+ and +=
 //---------------------------------------------------
 SELF_TYPE operator+(const SELF_TYPE& m) const 
 {
 	SELF_TYPE result;
 	for(unsigned int t = 0; t < NUM_VECS; ++t)
 	{
-		result[t] = axis[t] + m.axis[t];
+		result[t] = data[t] + m.data[t];
 	}
 	return result;
 }
 
-//---------------------------------------------------
 SELF_TYPE& operator+=(const SELF_TYPE& m) 
 {
 	SELF_TYPE result;
 	for(unsigned int t = 0; t < NUM_VECS; ++t)
 	{
-		axis[t] += m.axis[t];
+		data[t] += m.data[t];
 	}
 	return *this;
 }
 
+//---------------------------------------------------
+//operator- and -=
 //---------------------------------------------------
 SELF_TYPE operator-(const SELF_TYPE& m) const
 {
 	SELF_TYPE result;
 	for(unsigned int t = 0; t < NUM_VECS; ++t)
 	{
-		result[t] = axis[t] - m.axis[t];
+		result[t] = data[t] - m.data[t];
 	}
 	return result;
 }
 
-//---------------------------------------------------
 SELF_TYPE& operator-=(const SELF_TYPE& m) 
 {
 	SELF_TYPE result;
 	for(unsigned int t = 0; t < NUM_VECS; ++t)
 	{
-		axis[t] -= m.axis[t];
+		data[t] -= m.data[t];
 	}
 	return *this;
 }
 
 //---------------------------------------------------
-VEC_TYPE vec_mul_mat(const VEC_TYPE_PRE& v) const
+//Vector * Matrix
+//---------------------------------------------------
+friend SELF_TYPE mul(const VEC_TYPE_PRE& v, const SELF_TYPE& m)
 {
 	VEC_TYPE result(0);
 	for(int t = 0; t < NUM_ROW; ++t)
 	{
-		result += axis[t] * v[t];
+		result += data[t] * v[t];
 	}
 	return result;
 }
 
 //---------------------------------------------------
-VEC_TYPE_PRE mat_mul_vec(const VEC_TYPE& v) const
+//Matrix * Vector
+//---------------------------------------------------
+friend SELF_TYPE mul(const SELF_TYPE& m, const VEC_TYPE_PRE& v)
 {
-	VEC_TYPE_PRE result;
+		VEC_TYPE_PRE result;
 	for(int t = 0; t < NUM_ROW; ++t)
 	{
-		result[t] = dot(v, axis[t]);
+		result[t] = dot(v, data[t]);
 	}
 	return result;
 }
 
 //---------------------------------------------------
-friend SELF_TYPE mul(const VEC_TYPE_PRE& v, const SELF_TYPE& m)
-{
-	return m.vec_mul_mat(v);
-}
-
-//---------------------------------------------------
-friend SELF_TYPE mul(const SELF_TYPE&, const VEC_TYPE_PRE& v)
-{
-	return m.mat_mul_vec(v);
-}
-
+//Matrix * Matrix mathematical multiplication
 //---------------------------------------------------
 friend SELF_TYPE mul(const SELF_TYPE& a, const SELF_TYPE& b)
 {
 	SELF_TYPE r;
 	for(unsigned int t = 0; t < NUM_VECS; ++t)
 	{
-		r.axis[t] = mul(a.axis[t], b);
+		r.data[t] = mul(a.data[t], b);
 	}
 	return r;
+}
+
+//---------------------------------------------------
+//Matrix * Matrix componentwise multiplication
+//---------------------------------------------------
+friend SELF_TYPE cmul(const SELF_TYPE& a, const SELF_TYPE& b)
+{
+	SELF_TYPE r;
+	for(unsigned int t = 0; t < NUM_VECS; ++t)
+	{
+		r.data[t] = cmul(a.data[t], b.data[t]);
+	}
+	return r;
+}
+
+//---------------------------------------------------
+//transpose
+//---------------------------------------------------
+SELF_TYPE transpose() const
+{
+	SELF_TYPE r;
+
+	for(int t = 0; t < NUM_ROW; ++t)
+	for(int s = 0; s < NUM_COL; ++s)
+	{
+		r.at(t,s) = at(s,t);
+	}
+
+	return r;
+}
+
+friend SELF_TYPE transpose(const SELF_TYPE& m)
+{
+	return m.transpose();
 }

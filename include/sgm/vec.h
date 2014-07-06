@@ -18,7 +18,7 @@ struct vec2
 	{
 		struct { DATA_TYPE x, y; };
 		struct { DATA_TYPE u, v; };
-		DATA_TYPE d[NUM_ELEMS];
+		DATA_TYPE data[NUM_ELEMS];
 	};
 
 	vec2()
@@ -28,7 +28,7 @@ struct vec2
 	{
 		for(unsigned int t = 0; t < NUM_ELEMS; ++t)
 		{
-			d[t] = s;
+			data[t] = s;
 		}
 	}
 
@@ -56,7 +56,7 @@ struct vec3
 		struct { DATA_TYPE x, y, z; };
 		struct { DATA_TYPE u, v, w; };
 		struct { DATA_TYPE r, g, b; };
-		DATA_TYPE d[NUM_ELEMS];
+		DATA_TYPE data[NUM_ELEMS];
 	};
 
 	vec3()
@@ -66,7 +66,7 @@ struct vec3
 	{
 		for(unsigned int t = 0; t < NUM_ELEMS; ++t)
 		{
-			d[t] = s;
+			data[t] = s;
 		}
 	}
 
@@ -78,7 +78,10 @@ struct vec3
 
 #include "vec_common.inl"
 	
-	SELF_TYPE cross(const SELF_TYPE& v)
+	//---------------------------------------------------
+	//cross product
+	//---------------------------------------------------
+	SELF_TYPE cross(const SELF_TYPE& v) const
 	{
 		const DATA_TYPE x = (y * v.z) - (v.y * z);
 		const DATA_TYPE y = (v.x * z) - (x * v.z);
@@ -92,11 +95,13 @@ struct vec3
 		return a.cross(b);
 	}
 
-	friend vec3 triple(const vec3& v, const vec3& a, const vec3& b)
+	//---------------------------------------------------
+	//tiple product: dot(v, cross(a,b))
+	//---------------------------------------------------
+	friend DATA_TYPE triple(const vec3& v, const vec3& a, const vec3& b)
 	{
-		return dot(v, cross(a,b));
+		return v.dot(a.cross(b));
 	}
-
 };
 
 /////////////////////////////////////////////////////////////////
@@ -113,7 +118,7 @@ struct vec4
 	{
 		struct { DATA_TYPE x, y, z, w; };
 		struct { DATA_TYPE r, g, b, a; };
-		DATA_TYPE d[NUM_ELEMS];
+		DATA_TYPE data[NUM_ELEMS];
 	};
 
 	vec4()
@@ -123,7 +128,7 @@ struct vec4
 	{
 		for(unsigned int t = 0; t < NUM_ELEMS; ++t)
 		{
-			d[t] = s;
+			data[t] = s;
 		}
 	}
 
@@ -148,7 +153,7 @@ struct vec_n
 	typedef vec_n SELF_TYPE;
 	static const unsigned int NUM_ELEMS = TNUM_ELEMS;
 
-	DATA_TYPE d[NUM_ELEMS];
+	DATA_TYPE data[NUM_ELEMS];
 
 	vec_n() { }
 
