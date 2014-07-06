@@ -19,66 +19,87 @@
 
 SGE_BEGIN_MATH_NAMESPACE
 
+//----------------------------------------------------------
+//Common Pi constants
+//----------------------------------------------------------
 template <typename T>
-T Pi(void)
+T pi(void)
 {
 	return (T)(3.141592653589793);
 }
 
 template <typename T>
-T HalfPi(void)
+T half_pi(void)
 {
-	return Pi<T>() * (T)(0.5);
+	return pi<T>() * (T)(0.5);
 }
 
 template <typename T>
-T TwoPi(void)
+T two_pi(void)
 {
-	return Pi<T>() * (T)(2.0);
+	return pi<T>() * (T)(2.0);
 }
 
 template <typename T>
-T InvPi(void)
+T inv_pi(void)
 {
-	return (T)(1.0) / Pi<T>();
+	return (T)(1.0) / pi<T>();
 }
 
 template <typename T>
-T InvTwoPi(void)
+T inv_2pi(void)
 {
 	return (T)(1.0) / TwoPi<T>();
 }
 
 template<class T>
-T ToRadian(const T& degree)
+T to_radian(const T& degree)
 {
 	return degree * (T)(0.01745329251994);
 }
 
 template<class T>
-T ToDegree(const float radian)
+T to_degree(const T& radian)
 {
 	return radian * (T)(57.2957795130785);
 }
 
-//[TODO]
+//----------------------------------------------------------
+//Basic math operations
+//----------------------------------------------------------
 template <class T>
-T abs(T a)					{ return ::fabsf(a); }
+T abs(T a)					{ return ::fabsf((float)a); }
+
+template <>
+double abs(double a)		{ return ::abs(a); }
+
+//
+template <class T>
+T sign(T a)					{ return (a >= (T)0.f) ? (T)1.f : (T)-1.f; }
+
+//
+template <class T>
+T sqrt(T a)					{ return ::sqrtf((float)a); }
+
+template <>
+double sqrt(double a)		{ return ::sqrt(a); }
 
 template <class T>
-T sign(T a)					{ return (a >= 0.f) ? 1.f : -1.f; }
+T inv_sqrt(T a)				{ return 1.f/sqrt(a); }
 
+//
 template <class T>
-T sqrt(T a)					{ return ::sqrtf(a); }
+T sin(T a)					{ return ::sinf((float)a); }
 
-template <class T>
-T recipSqrt(T a)			{ return 1.f/::sqrtf(a); }
+template <>
+double sin(double a)		{ return ::sin(a); }
 
+//
 template <class T>
-T sin(T a)					{ return ::sinf(a); }
+T cos(T a)					{ return ::cosf((float)a); }
 
-template <class T>
-T cos(T a)					{ return ::cosf(a); }
+template <>
+double cos(double a)		{ return ::cos(a); }
 
 template <class T>
 void sincos(T& sin, T& cos, const T& a)
@@ -87,12 +108,18 @@ void sincos(T& sin, T& cos, const T& a)
 	cos = ::cosf(a);
 }
 
+///
+///Returns the min(a,b)
+///
 template <class T>
 T pick_min(const T& a, const T& b)
 {
 	return a<b ? a : b;
 }
 
+///
+///Returns the max(a,b)
+///
 template <class T>
 T pick_max(const T& a, const T& b)
 {
