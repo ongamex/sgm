@@ -4,8 +4,11 @@ SGM (SG Math library)
 This is a math library designed for games.
 
 [NOTE]:
-The code "deprecated" folder is not maintained!
-The code sould work with some modifications, but I cannot guarantee that all functions work corretly.
-There is a SSE implementation and a fallback 'Scalar' version.
+The files in "deprecated" folder is not maintained!
+The code should work with some modifications, but I cannot guarantee that all functions will work corretly.
+There is an SSE implementation and a fallback 'Scalar' version.
 
-That kind of functionaliy will be later added to the sgm library itself.
+That kind of functionaliy will be later added to the sgm library itself. 
+target simd interfaces:
+
+SSE, NEON, Scalar fallback
