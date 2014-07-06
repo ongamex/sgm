@@ -45,6 +45,27 @@ DATA_TYPE&			operator[](const unsigned int t)		{ return data[t]; }
 const DATA_TYPE&	operator[](const unsigned int t) const	{ return data[t]; }
 
 //-----------------------------------------------------------
+//operator== and !=
+//-----------------------------------------------------------
+bool operator==(const SELF_TYPE& v) const
+{
+	bool result = true;
+	for(unsigned t = 0; t < NUM_ELEMS; ++t)
+	{
+		result = result && (data[t] == v[t]);
+		//not autovect friendly, 
+		//if(data[t] != v[t]) return false;
+	}
+
+	return result;
+}
+
+bool operator!=(const SELF_TYPE& v) const
+{
+	return !((*this) == v);
+}
+
+//-----------------------------------------------------------
 // Vector + Vector
 //-----------------------------------------------------------
 SELF_TYPE& operator+=(const SELF_TYPE& v)
@@ -124,7 +145,7 @@ friend SELF_TYPE cmul(const SELF_TYPE& a, const const SELF_TYPE& b)
 	SELF_TYPE r;
 	for(unsigned int t = 0; t < NUM_ELEMS; ++t)
 	{
-		r[t] = data[t] * v[t];
+		r[t] = a[t] * b[t];
 	}
 	return r;
 }
@@ -137,7 +158,7 @@ friend SELF_TYPE cdiv(const SELF_TYPE& a, const const SELF_TYPE& b)
 	SELF_TYPE r;
 	for(unsigned int t = 0; t < NUM_ELEMS; ++t)
 	{
-		r[t] = data[t] / v[t];
+		r[t] = a[t] / b[t];
 	}
 	return r;
 }
@@ -248,7 +269,7 @@ SELF_TYPE normalized() const
 	return result;
 }
 
-friend DATA_TYPE normalized(const SELF_TYPE& v)
+friend SELF_TYPE normalized(const SELF_TYPE& v)
 {
 	return v.normalized();
 }
@@ -275,10 +296,9 @@ SELF_TYPE refract(const SELF_TYPE& normal, const DATA_TYPE& eta) const
 
 	const DATA_TYPE p = dot(normal);
 	const DATA_TYPE k = one - eta*eta * (one -  p*p);
-	if (k < zero)
-		return SELF_TYPE(zero);
-	else
-		return (*this) * eta - (eta * p + sgm::sqrt(k)) * normal;
+	
+	if (k < zero) return SELF_TYPE(zero);
+	else return (*this) * eta - (eta * p + sgm::sqrt(k)) * normal;
 }
 
 friend SELF_TYPE refract(const SELF_TYPE& inc, const SELF_TYPE& n, DATA_TYPE& eta)				

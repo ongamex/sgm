@@ -2,6 +2,7 @@
 #include "vec.h"
 
 SGE_BEGIN_MATH_NAMESPACE
+
 /////////////////////////////////////////////////////////////////
 //Quaternion class implementation
 //Figure out what to do with quaternion 
@@ -173,9 +174,9 @@ struct quat
 		return r;
 	}
 
-	friend quat operator*(const DATA_TYPE& s, const quat& v)
+	friend quat operator*(const DATA_TYPE& s, const quat& q)
 	{
-		return v * s;
+		return q * s;
 	}
 
 	//-----------------------------------------------------------
@@ -200,9 +201,9 @@ struct quat
 		return r;
 	}
 
-	friend quat operator/(const DATA_TYPE& s, const quat& v)
+	friend quat operator/(const DATA_TYPE& s, const quat& q)
 	{
-		return v / s;
+		return q / s;
 	}
 
 };

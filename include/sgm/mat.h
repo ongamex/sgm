@@ -22,6 +22,8 @@ struct mat33
 	static const unsigned int VEC_SIZE = NUM_COL;
 	static const unsigned int NUM_VECS = NUM_ROW;
 
+	//keep this named like this in order to be abe to quickly 
+	//switch to column major data type.
 	VEC_TYPE data[NUM_VECS];
 	
 	#include "mat_common.inl"

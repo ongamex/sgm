@@ -17,7 +17,7 @@ struct vec2
 	union
 	{
 		struct { DATA_TYPE x, y; };
-		struct { DATA_TYPE u, v; };
+		//struct { DATA_TYPE u, v; };
 		DATA_TYPE data[NUM_ELEMS];
 	};
 
@@ -54,8 +54,8 @@ struct vec3
 	union
 	{
 		struct { DATA_TYPE x, y, z; };
-		struct { DATA_TYPE u, v, w; };
-		struct { DATA_TYPE r, g, b; };
+		//struct { DATA_TYPE u, v, w; };
+		//struct { DATA_TYPE r, g, b; };
 		DATA_TYPE data[NUM_ELEMS];
 	};
 
@@ -117,7 +117,7 @@ struct vec4
 	union
 	{
 		struct { DATA_TYPE x, y, z, w; };
-		struct { DATA_TYPE r, g, b, a; };
+		//struct { DATA_TYPE r, g, b, a; };
 		DATA_TYPE data[NUM_ELEMS];
 	};
 
