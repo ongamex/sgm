@@ -20,7 +20,7 @@ static SELF_TYPE get_axis(const unsigned int& axisIndex, const DATA_TYPE& axisLe
 	{
 		result[t] = (DATA_TYPE)(0.0);
 	}
-	result[axisIndex] = (DATA_TYPE)(axisLen);
+	result[axisIndex] = axisLen;
 	return result;
 }
 
@@ -44,6 +44,7 @@ static SELF_TYPE get_zero()
 DATA_TYPE&			operator[](const unsigned int t)		{ return data[t]; }
 const DATA_TYPE&	operator[](const unsigned int t) const	{ return data[t]; }
 
+
 //-----------------------------------------------------------
 //operator== and !=
 //-----------------------------------------------------------
@@ -65,6 +66,25 @@ bool operator!=(const SELF_TYPE& v) const
 	return !((*this) == v);
 }
 
+
+//-----------------------------------------------------------
+//unary operators - +
+//-----------------------------------------------------------
+SELF_TYPE operator-() const
+{
+	SELF_TYPE result;
+	for(unsigned int t = 0; t < NUM_ELEMS; ++t)
+	{
+		result[t] = - data[t];
+	}
+	return result;
+}
+
+SELF_TYPE operator+() const
+{
+	return *this;
+}
+
 //-----------------------------------------------------------
 // Vector + Vector
 //-----------------------------------------------------------
@@ -79,11 +99,8 @@ SELF_TYPE& operator+=(const SELF_TYPE& v)
 
 SELF_TYPE operator+(const SELF_TYPE& v) const
 {
-	SELF_TYPE r;
-	for(unsigned int t = 0; t < NUM_ELEMS; ++t)
-	{
-		r[t] = data[t] + v[t];
-	}
+	SELF_TYPE r(*this);
+	r += v;
 	return r;
 }
 
@@ -102,11 +119,8 @@ SELF_TYPE& operator-=(const SELF_TYPE& v)
 
 SELF_TYPE operator-(const SELF_TYPE& v) const
 {
-	SELF_TYPE r;
-	for(unsigned int t = 0; t < NUM_ELEMS; ++t)
-	{
-		r[t] = data[t] - v[t];
-	}
+	SELF_TYPE r(*this);
+	r -= v;
 	return r;
 }
 
@@ -124,11 +138,8 @@ SELF_TYPE& operator*=(const DATA_TYPE& s)
 
 SELF_TYPE operator*(const DATA_TYPE& s) const
 {
-	SELF_TYPE r;
-	for(unsigned int t = 0; t < NUM_ELEMS; ++t)
-	{
-		r[t] = data[t] * s;
-	}
+	SELF_TYPE r(*this);
+	r *= s;
 	return r;
 }
 
@@ -304,4 +315,25 @@ SELF_TYPE refract(const SELF_TYPE& normal, const DATA_TYPE& eta) const
 friend SELF_TYPE refract(const SELF_TYPE& inc, const SELF_TYPE& n, DATA_TYPE& eta)				
 {													
 	return i.refract(n, eta);
+}
+
+//---------------------------------------------------------
+//distance
+//---------------------------------------------------------
+SELF_TYPE distance(const SELF_TYPE& other) const
+{
+	return length(*this - other);
+}
+
+friend SELF_TYPE distance(const SELF_TYPE& a, const SELF_TYPE& b)
+{
+	return a.distance(b);
+}
+
+//---------------------------------------------------------
+//lerp
+//---------------------------------------------------------
+friend SELF_TYPE lerp(const SELF_TYPE& a, const SELF_TYPE& b, const DATA_TYPE& t)
+{
+	return a + (b-a)*t;
 }

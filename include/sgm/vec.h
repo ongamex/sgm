@@ -91,7 +91,7 @@ struct vec3
 		return SELF_TYPE(x, y, z);
 	}
 									
-	friend vec3 corss(const vec3& a, const vec3& b)
+	friend vec3 cross(const vec3& a, const vec3& b)
 	{
 		return a.cross(b);
 	}
