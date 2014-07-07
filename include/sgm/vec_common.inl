@@ -140,7 +140,7 @@ friend SELF_TYPE operator*(const DATA_TYPE& s, const SELF_TYPE& v)
 //---------------------------------------------------------
 //componentwise multiplication
 //---------------------------------------------------------
-friend SELF_TYPE cmul(const SELF_TYPE& a, const const SELF_TYPE& b)
+friend SELF_TYPE cmul(const SELF_TYPE& a, const SELF_TYPE& b)
 {
 	SELF_TYPE r;
 	for(unsigned int t = 0; t < NUM_ELEMS; ++t)
@@ -153,7 +153,7 @@ friend SELF_TYPE cmul(const SELF_TYPE& a, const const SELF_TYPE& b)
 //---------------------------------------------------------
 //componentwise division
 //---------------------------------------------------------
-friend SELF_TYPE cdiv(const SELF_TYPE& a, const const SELF_TYPE& b)
+friend SELF_TYPE cdiv(const SELF_TYPE& a, const SELF_TYPE& b)
 {
 	SELF_TYPE r;
 	for(unsigned int t = 0; t < NUM_ELEMS; ++t)
@@ -194,7 +194,7 @@ SELF_TYPE component_min(const SELF_TYPE& v) const
 	return r;
 }
 
-friend SELF_TYPE component_min(const SELF_TYPE& a, const const SELF_TYPE& b)
+friend SELF_TYPE component_min(const SELF_TYPE& a, const SELF_TYPE& b)
 {
 	a.component_min(b);
 }
@@ -212,7 +212,7 @@ SELF_TYPE component_max(const SELF_TYPE& v) const
 	return r;
 }
 
-friend SELF_TYPE component_max(const SELF_TYPE& a, const const SELF_TYPE& b)
+friend SELF_TYPE component_max(const SELF_TYPE& a, const SELF_TYPE& b)
 {
 	a.component_max(b);
 }

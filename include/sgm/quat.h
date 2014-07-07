@@ -1,4 +1,4 @@
-#include "sgmath.h"
+#include "sgm_base.h"
 #include "vec.h"
 
 SGE_BEGIN_MATH_NAMESPACE

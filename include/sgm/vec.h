@@ -1,6 +1,7 @@
 #pragma once
 
-#include "sgmath.h"
+#include "sgm_base.h"
+#include "math_utils.h"
 
 SGE_BEGIN_MATH_NAMESPACE
 									
