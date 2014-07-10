@@ -48,12 +48,14 @@ double saturate(const double x)
 //----------------------------------------------------------
 //lerp
 //----------------------------------------------------------
-float lerp(const float a, const float b, const float t)
+template <class T>
+T lerp(const T& a, const T& b, const float t)
 {
 	return a + (b-a)*t;
 }
 
-double lerp(const double a, const double b, const double t)
+template <class T>
+T lerp(const T& a, const T& b, const double t)
 {
 	return a + (b-a)*t;
 }

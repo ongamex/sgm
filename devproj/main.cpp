@@ -1,6 +1,6 @@
 #include <iostream>
-#include "sgm\mat.h"
-//#include "sgm\math_utils.h"
+#include <sgm\sgm.h>
+#include <DirectXMath.h>
 
 using namespace sgm;
 
@@ -91,15 +91,16 @@ void usevar(T& v)
 }
 
 int main()
-{
-	vec3f a,b;
+{	
+	quat<float> a(1,2,3,4);
+	quat<float> b(0.5, 0.6, 0.7, 0.8);
 
 	initvar(a);
 	initvar(b);
 
-	vec3f c = cross(a,b);
+	a = mul(a,b);
 
-	usevar(c);
+	usevar(a);
 
 	return 0;
 }

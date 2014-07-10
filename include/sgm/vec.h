@@ -18,7 +18,6 @@ struct vec2
 	union
 	{
 		struct { DATA_TYPE x, y; };
-		//struct { DATA_TYPE u, v; };
 		DATA_TYPE data[NUM_ELEMS];
 	};
 
@@ -55,8 +54,6 @@ struct vec3
 	union
 	{
 		struct { DATA_TYPE x, y, z; };
-		//struct { DATA_TYPE u, v, w; };
-		//struct { DATA_TYPE r, g, b; };
 		DATA_TYPE data[NUM_ELEMS];
 	};
 
@@ -118,7 +115,6 @@ struct vec4
 	union
 	{
 		struct { DATA_TYPE x, y, z, w; };
-		//struct { DATA_TYPE r, g, b, a; };
 		DATA_TYPE data[NUM_ELEMS];
 	};
 
@@ -165,6 +161,40 @@ struct vec_n
 /////////////////////////////////////////////////////////////////
 //
 /////////////////////////////////////////////////////////////////
+template<unsigned X, unsigned Y, typename TVEC>
+vec2<typename TVEC::DATA_TYPE> permute(const TVEC& vec)
+{
+	SGE_MATH_STATIC_ASSERT(TVEC::NUM_ELEMS > X, "sgm::permute arhumargument out of range!");
+	SGE_MATH_STATIC_ASSERT(TVEC::NUM_ELEMS > Y, "sgm::permute arhumargument out of range!");
+
+	return vec2<typename TVEC::DATA_TYPE>(vec[X], vec[Y]); 
+}
+
+template<unsigned X, unsigned Y, unsigned Z, typename TVEC>
+vec3<typename TVEC::DATA_TYPE> permute(const TVEC& vec)
+{
+	SGE_MATH_STATIC_ASSERT(TVEC::NUM_ELEMS > X, "sgm::permute arhumargument out of range!");
+	SGE_MATH_STATIC_ASSERT(TVEC::NUM_ELEMS > Y, "sgm::permute arhumargument out of range!");
+	SGE_MATH_STATIC_ASSERT(TVEC::NUM_ELEMS > Z, "sgm::permute arhumargument out of range!");
+
+	return vec3<typename TVEC::DATA_TYPE>(vec[X], vec[Y], vec[Z]); 
+}
+
+template<unsigned X, unsigned Y, unsigned Z, unsigned W, typename TVEC>
+vec4<typename TVEC::DATA_TYPE> permute(const TVEC& vec)
+{
+	SGE_MATH_STATIC_ASSERT(TVEC::NUM_ELEMS > X, "sgm::permute arhumargument out of range!");
+	SGE_MATH_STATIC_ASSERT(TVEC::NUM_ELEMS > Y, "sgm::permute arhumargument out of range!");
+	SGE_MATH_STATIC_ASSERT(TVEC::NUM_ELEMS > Z, "sgm::permute arhumargument out of range!");
+	SGE_MATH_STATIC_ASSERT(TVEC::NUM_ELEMS > W, "sgm::permute arhumargument out of range!");
+
+	return vec4<typename TVEC::DATA_TYPE>(vec[X], vec[Y], vec[Z], vec[W]); 
+}
+
+
+/////////////////////////////////////////////////////////////////
+//
+/////////////////////////////////////////////////////////////////
 typedef vec2<int>			vec2i;
 typedef vec2<unsigned int>	vec2u;
 typedef vec2<float>			vec2f;
@@ -207,6 +237,5 @@ struct vec_type_picker<T, 4>
 {
 	typedef vec4<T>	value;
 };
-
 
 SGE_END_MATH_NAMESPACE

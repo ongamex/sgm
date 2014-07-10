@@ -333,7 +333,7 @@ friend SELF_TYPE distance(const SELF_TYPE& a, const SELF_TYPE& b)
 //---------------------------------------------------------
 //lerp
 //---------------------------------------------------------
-friend SELF_TYPE lerp(const SELF_TYPE& a, const SELF_TYPE& b, const DATA_TYPE& t)
-{
-	return a + (b-a)*t;
-}
+//friend SELF_TYPE lerp(const SELF_TYPE& a, const SELF_TYPE& b, const DATA_TYPE& t)
+//{
+//	return a + (b-a)*t;
+//}

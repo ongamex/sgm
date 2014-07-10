@@ -21,7 +21,7 @@ T half_pi(void)
 
 template <typename T>
 T two_pi(void)
-{ return pi<T>() * (T)(2.0); 
+{ return pi<T>() * (T)(2.0); }
 
 template <typename T>
 T inv_pi(void)

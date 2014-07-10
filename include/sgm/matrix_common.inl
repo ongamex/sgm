@@ -15,7 +15,6 @@
 //data[] - an array of type VEC_TYPE with size NUM_VECS
 //NUM_VECS - the number of VEC_TYPEs needed to represent the matrix
 //VEC_SIZE - the number of data elements in VEC_TYPE
-//VEC_TYPE_PRE - premultiplication vector type
 /////////////////////////////////////////////////////////////////
 
 //---------------------------------------------------
@@ -26,12 +25,12 @@
 
 DATA_TYPE& at(unsigned const int r, const unsigned int c)
 {
-	return data[r][c];
+	return data[c][r];
 }
 
 const DATA_TYPE& at(unsigned const int r, const unsigned int c) const
 {
-	return data[r][c];
+	return data[c][r];
 }
 
 void identify_axis(const unsigned int i)
@@ -42,21 +41,6 @@ void identify_axis(const unsigned int i)
 //---------------------------------------------------
 //Scalars operator* and *=
 //---------------------------------------------------
-SELF_TYPE operator*(const DATA_TYPE& s) const 
-{
-	SELF_TYPE result;
-	for(unsigned int t = 0; t < NUM_VECS; ++t)
-	{
-		result[t] = data[t] * s;
-	}
-	return result;
-}
-
-friend SELF_TYPE operator*(const DATA_TYPE& s, const SELF_TYPE& m)
-{
-	return m * s;
-}
-
 SELF_TYPE& operator*=(const SELF_TYPE& s) 
 {
 	SELF_TYPE result;
@@ -67,19 +51,21 @@ SELF_TYPE& operator*=(const SELF_TYPE& s)
 	return *this;
 }
 
-//---------------------------------------------------
-//operator+ and +=
-//---------------------------------------------------
-SELF_TYPE operator+(const SELF_TYPE& m) const 
+SELF_TYPE operator*(const DATA_TYPE& s) const 
 {
-	SELF_TYPE result;
-	for(unsigned int t = 0; t < NUM_VECS; ++t)
-	{
-		result[t] = data[t] + m.data[t];
-	}
+	SELF_TYPE result(*this);
+	result *= s;
 	return result;
 }
 
+friend SELF_TYPE operator*(const DATA_TYPE& s, const SELF_TYPE& m)
+{
+	return m * s;
+}
+
+//---------------------------------------------------
+//operator+ and +=
+//---------------------------------------------------
 SELF_TYPE& operator+=(const SELF_TYPE& m) 
 {
 	SELF_TYPE result;
@@ -90,19 +76,16 @@ SELF_TYPE& operator+=(const SELF_TYPE& m)
 	return *this;
 }
 
-//---------------------------------------------------
-//operator- and -=
-//---------------------------------------------------
-SELF_TYPE operator-(const SELF_TYPE& m) const
+SELF_TYPE operator+(const SELF_TYPE& m) const 
 {
-	SELF_TYPE result;
-	for(unsigned int t = 0; t < NUM_VECS; ++t)
-	{
-		result[t] = data[t] - m.data[t];
-	}
+	SELF_TYPE result(*this);
+	result += m;
 	return result;
 }
 
+//---------------------------------------------------
+//operator- and -=
+//---------------------------------------------------
 SELF_TYPE& operator-=(const SELF_TYPE& m) 
 {
 	SELF_TYPE result;
@@ -113,45 +96,50 @@ SELF_TYPE& operator-=(const SELF_TYPE& m)
 	return *this;
 }
 
-//---------------------------------------------------
-//Vector * Matrix
-//[TODO]Column major multiplication order
-//---------------------------------------------------
-friend SELF_TYPE mul(const VEC_TYPE_PRE& v, const SELF_TYPE& m)
+SELF_TYPE operator-(const SELF_TYPE& m) const
 {
-	VEC_TYPE result(0);
+	SELF_TYPE result(*this);
+	result -= m;
+	return result;
+}
+
+//---------------------------------------------------
+//Vector * Matrix  -> (1, NUM_COL) (a ROW vector)
+//---------------------------------------------------
+friend VEC_TYPE mul(const VEC_TYPE& v, const SELF_TYPE& m)
+{
+	VEC_TYPE result;
 	for(int t = 0; t < NUM_VECS; ++t)
 	{
-		result += data[t] * v[t];
+		result[t] = dot(v, m.data[t]);
 	}
 	return result;
 }
 
 //---------------------------------------------------
-//Matrix * Vector
-//[TODO]Column major multiplication order
+//Matrix * Vector -> (NUM_ROW, 1) (a COLUMN vector)
 //---------------------------------------------------
-friend VEC_TYPE_PRE mul(const SELF_TYPE& m, const VEC_TYPE_PRE& v)
+friend VEC_TYPE mul(const SELF_TYPE& m, const VEC_TYPE& v)
 {
-	VEC_TYPE_PRE result;
+	VEC_TYPE result = VEC_TYPE::get_zero();
 	for(int t = 0; t < NUM_VECS; ++t)
 	{
-		result[t] = dot(v, data[t]);
+		result += m.data[t] * v[t];
 	}
 	return result;
 }
 
 //---------------------------------------------------
 //Matrix * Matrix mathematical multiplication
-//[TODO]Column major multiplication order
 //---------------------------------------------------
 friend SELF_TYPE mul(const SELF_TYPE& a, const SELF_TYPE& b)
 {
 	SELF_TYPE r;
 	for(unsigned int t = 0; t < NUM_VECS; ++t)
 	{
-		r.data[t] = mul(a.data[t], b);
+		r[t] = mul(a, b.data[t]);
 	}
+
 	return r;
 }
 
