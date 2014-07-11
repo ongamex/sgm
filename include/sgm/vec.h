@@ -74,6 +74,18 @@ struct vec3
 		z(_z)
 	{ }
 
+	vec3(const vec2<DATA_TYPE>& xy, const DATA_TYPE& _z) :
+		x(xy[0]),
+		y(xy[1]),
+		z(_z)
+	{}
+
+	vec3(const DATA_TYPE& _x, const vec2<DATA_TYPE>& yz) :
+		x(_x),
+		y(yz[0]),
+		z(yz[1])
+	{}
+
 #include "vec_common.inl"
 	
 	//---------------------------------------------------
@@ -81,11 +93,11 @@ struct vec3
 	//---------------------------------------------------
 	SELF_TYPE cross(const SELF_TYPE& v) const
 	{
-		const DATA_TYPE x = (y * v.z) - (v.y * z);
-		const DATA_TYPE y = (v.x * z) - (x * v.z);
-		const DATA_TYPE z = (x * v.y) - (v.x * y);
+		const float tx = (y*v.z) - (v.y*z);
+		const float ty = (v.x*z) - (x*v.z);
+		const float tz = (x*v.y) - (v.x*y);
 
-		return SELF_TYPE(x, y, z);
+		return SELF_TYPE(tx, ty, tz);
 	}
 									
 	friend vec3 cross(const vec3& a, const vec3& b)
@@ -135,6 +147,42 @@ struct vec4
 		z(_z),
 		w(_w)
 	{ }
+
+	vec4(const vec2<DATA_TYPE>& xy, const vec2<DATA_TYPE>& zw) :
+		x(xy[0]),
+		y(xy[1]),
+		z(zw[0]),
+		w(zw[1]),
+	{ }
+
+	vec4(const vec2<DATA_TYPE>& xy, const DATA_TYPE& z, const DATA_TYPE& w) :
+		x(xy[0]),
+		y(xy[1]),
+		z(z),
+		w(w),
+	{ }
+
+	vec4(const DATA_TYPE& x, const DATA_TYPE& y, const vec2<DATA_TYPE>& zw) :
+		x(x),
+		y(y),
+		z(zw[0]),
+		w(zw[1]),
+	{ }
+
+	vec4(const DATA_TYPE& _x, const vec3<DATA_TYPE>& v) :
+		x(_x),
+		y(v[0]),
+		z(v[1]),
+		w(v[2])
+	{}
+
+	vec4(const vec3<DATA_TYPE>& v, const DATA_TYPE& _w) :
+		x(v[0]),
+		y(v[1]),
+		z(v[2]),
+		w(_w)
+	{}
+
 
 #include "vec_common.inl"
 

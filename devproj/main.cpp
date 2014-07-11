@@ -92,15 +92,12 @@ void usevar(T& v)
 
 int main()
 {	
-	quat<float> a(1,2,3,4);
-	quat<float> b(0.5, 0.6, 0.7, 0.8);
+	matrix44<float> m; 
+	matrix_lookat_rh(m, vec3f(0), vec3f::get_axis(1), vec3f::get_axis(2));
 
-	initvar(a);
-	initvar(b);
+	vec4f v(5,6,7, 1);
 
-	a = mul(a,b);
-
-	usevar(a);
+	v = mul(m, v);
 
 	return 0;
 }

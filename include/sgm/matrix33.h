@@ -91,6 +91,13 @@ struct matrix33
 		result.data[2] = VEC_TYPE(tx, ty, (DATA_TYPE)1.0);
 	}
 
+	friend void matrix_translation_2d(SELF_TYPE& result, const vec2<DATA_TYPE>& t)
+	{
+		result.data[0] = VEC_TYPE::get_axis(0);
+		result.data[1] = VEC_TYPE::get_axis(1);
+		result.data[2] = VEC_TYPE(t.x, t.y, (DATA_TYPE)1.0);
+	}
+
 	//----------------------------------------------------------------
 	//scaling
 	//----------------------------------------------------------------
@@ -106,9 +113,8 @@ struct matrix33
 	//----------------------------------------------------------------
 	friend void  matrix_rotation_x(SELF_TYPE& result, const DATA_TYPE& angle)
 	{
-		DATA_TYPE s,c; sgm::sincos(s, c, angle);
+		DATA_TYPE s,c; sgm::sincos(angle, s, c);
 
-		SELF_TYPE result;
 		result.data[0] = VEC_TYPE::get_axis(0);
 		result.data[1] = VEC_TYPE(0,  c, s);
 		result.data[2] = VEC_TYPE(0, -s, c);
@@ -119,7 +125,7 @@ struct matrix33
 	//----------------------------------------------------------------
 	friend void matrix_rotation_y(SELF_TYPE& result, const DATA_TYPE& angle)
 	{
-		DATA_TYPE s,c; sgm::sincos(s, c, angle);
+		DATA_TYPE s,c; sgm::sincos(angle, s, c);
 
 		result.data[0] = VEC_TYPE(c, 0, -s);
 		result.data[1] = VEC_TYPE::get_axis(1);
@@ -139,35 +145,30 @@ struct matrix33
 	}
 
 	//----------------------------------------------------------------
-	//Matrix form quaternion
+	//Quaternion rotation
 	//----------------------------------------------------------------
-	/*friend void matrix_form_quat(SELF_TYPE& result, const quat<DATA_TYPE>& q)
+	friend void matrix_rotation_quat(SELF_TYPE& result, const quat<DATA_TYPE>& q)
 	{
-		typedef quat<DATA_TYPE> q_type;
+		const DATA_TYPE& x = q[0];
+		const DATA_TYPE& y = q[1];
+		const DATA_TYPE& z = q[2];
+		const DATA_TYPE& w = q[3];
 
-		q_type q0 = q + q;
-		q_type q1 = cmul(q0, q);
+		const DATA_TYPE one = (DATA_TYPE)1.0;
+		const DATA_TYPE two = (DATA_TYPE)2.0;
 
-		q_type v0(q1.y, q1.x, q1.x, 0);
-		q_type v1(q1.z, q1.z, q1.y, 0);
-		q_type r0 = q_type(1.0, 1.0, 1.0, 0.0) - v0;
+		result.data[0] = VEC_TYPE(	one - two*(y*y - z*z), 
+									two*(x*y + z*w),
+									two*(x*z - y*w));
 
-		v0 = q_type(q.x, q.x, q.y, q.w);
-		v1 = q_type(q0.z, q0.y, q0.z, q0.w);
-		v0 = cmul(v0, v1);
+		result.data[1] = VEC_TYPE(	two*(x*y - z*w),
+									one - two*(x*x - z*z),
+									two*(y*z + x*w));
 
-		v1 = q_type(q.w, q.w, q.w, q.w);
-		q_type v2 = q_type(q0.y, q0.z, q0.x, q0.w);
-		v1 = cmul(v1, v2);
-
-		q_type r1 = v0 + v1;
-		q_type r2 = v0 - v1;
-
-		v0 = q_type(r1.y, r2.x, r2.y, r1.z);
-		v1 = q_type(r1.x, r2.z, r1.x, r2.z);
-
-	}*/
-
+		result.data[2] = VEC_TYPE(	two*(x*z + y*w),
+									two*(y*z - x*w),
+									one - two*(x*x - y*y));
+	}
 };
 
 SGE_END_MATH_NAMESPACE

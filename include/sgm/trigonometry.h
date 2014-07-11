@@ -88,6 +88,19 @@ void sincos(const double& angle, double& rsin, double& rcos)
 	rcos = ::cos(angle);
 }
 
+//-----------------------------------------------------------------
+//tangens
+//-----------------------------------------------------------------
+float tan(const float a)
+{
+	return ::tanf(a);
+}
+
+double tan(const double a)
+{
+	return ::tan(a);
+}
+
 SGE_END_MATH_NAMESPACE
 
 #endif
