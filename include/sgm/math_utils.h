@@ -13,13 +13,13 @@ SGE_BEGIN_MATH_NAMESPACE
 //min/max
 //----------------------------------------------------------
 template <class T>
-T pick_min(const T& a, const T& b)
+T value_min(const T& a, const T& b)
 {
 	return a<b ? a : b;
 }
 
 template <class T>
-T pick_max(const T& a, const T& b)
+T value_max(const T& a, const T& b)
 {
 	return a>b ? a : b;
 }

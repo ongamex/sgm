@@ -90,14 +90,24 @@ void usevar(T& v)
 	fwrite(&v, sizeof(T), 1, (FILE*)53);
 }
 
+template<unsigned offs = 0>
+__forceinline vec3f& tovec3(vec4f& v)
+{
+	return reinterpret_cast<vec3f&>(v[offs]);
+}
+
 int main()
 {	
-	matrix44<float> m; 
-	matrix_lookat_rh(m, vec3f(0), vec3f::get_axis(1), vec3f::get_axis(2));
+	vec4f a,b;
+	initvar(a);
+	initvar(b);
 
-	vec4f v(5,6,7, 1);
+	vec3f& x = tovec3(a);
+	vec3f& y = tovec3(b);
 
-	v = mul(m, v);
+	vec3f z = x+y;
+
+	usevar(z);
 
 	return 0;
 }

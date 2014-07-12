@@ -93,7 +93,7 @@ struct matrix44
 		result.data[3] = VEC_TYPE(tx, ty, tz, (DATA_TYPE)1.0);
 	}
 
-	friend void matrix_translation_2d(SELF_TYPE& result, const vec3<DATA_TYPE>& t)
+	friend void matrix_translation_3d(SELF_TYPE& result, const vec3<DATA_TYPE>& t)
 	{
 		result.data[0] = VEC_TYPE::get_axis(0);
 		result.data[1] = VEC_TYPE::get_axis(1);
@@ -128,8 +128,8 @@ struct matrix44
 		DATA_TYPE s,c; sgm::sincos(angle, s, c);
 
 		result.data[0] = VEC_TYPE::get_axis(0);
-		result.data[1] = VEC_TYPE(0,  c, s);
-		result.data[2] = VEC_TYPE(0, -s, c);
+		result.data[1] = VEC_TYPE(0,  c, s, 0);
+		result.data[2] = VEC_TYPE(0, -s, c, 0);
 		result.data[3] = VEC_TYPE::get_axis(3);
 	}
 
@@ -140,9 +140,9 @@ struct matrix44
 	{
 		DATA_TYPE s,c; sgm::sincos(angle, s, c);
 
-		result.data[0] = VEC_TYPE(c, 0, -s);
+		result.data[0] = VEC_TYPE(c, 0, -s, 0);
 		result.data[1] = VEC_TYPE::get_axis(1);
-		result.data[2] = VEC_TYPE(s, 0,  c);
+		result.data[2] = VEC_TYPE(s, 0,  c, 0);
 		result.data[3] = VEC_TYPE::get_axis(3);
 	}
 
@@ -153,8 +153,8 @@ struct matrix44
 	{
 		DATA_TYPE s,c; sgm::sincos(s, c, angle);
 
-		result.data[0] = VEC_TYPE( c, s, 0);
-		result.data[1] = VEC_TYPE(-s, c, 0);
+		result.data[0] = VEC_TYPE( c, s, 0, 0);
+		result.data[1] = VEC_TYPE(-s, c, 0, 0);
 		result.data[2] = VEC_TYPE::get_axis(2);
 		result.data[3] = VEC_TYPE::get_axis(3);
 	}
@@ -208,7 +208,7 @@ struct matrix44
 		result.data[0] = VEC_TYPE(xScale, 0, 0, 0);
 		result.data[1] = VEC_TYPE(0, yScale, 0, 0);
 		result.data[2] = VEC_TYPE(0, 0, fRange, (DATA_TYPE)-1.0);
-		result.data[3] = VEC_TYPE(0, 0, fRange * NearZ, 0);
+		result.data[3] = VEC_TYPE(0, 0, nZ * fRange, 0);
 	}
 
 	//----------------------------------------------------------------

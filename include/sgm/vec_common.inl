@@ -200,7 +200,7 @@ SELF_TYPE component_min(const SELF_TYPE& v) const
 	SELF_TYPE r;
 	for(unsigned int t = 0; t < NUM_ELEMS; ++t)
 	{
-		r[t] = sgm::pick_min(*this[t], v[t]);
+		r[t] = sgm::value_min(*this[t], v[t]);
 	}
 	return r;
 }
@@ -218,7 +218,7 @@ SELF_TYPE component_max(const SELF_TYPE& v) const
 	SELF_TYPE r;
 	for(unsigned int t = 0; t < NUM_ELEMS; ++t)
 	{
-		r[t] = sgm::pick_max(*this[t], v[t]);
+		r[t] = sgm::value_max(*this[t], v[t]);
 	}
 	return r;
 }
