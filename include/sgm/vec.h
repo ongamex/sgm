@@ -39,36 +39,36 @@ struct vec2
 
 #include "vec_common.inl"
 
-	//---------------------------------------------------
-	//polar to cartesian
-	//---------------------------------------------------
-	void polar_to_cartesian(const DATA_TYPE& angle, const DATA_TYPE& radius)
-	{
-		DATA_TYPE s,c; sgm::sincos(angle, s, c);
-		data[0] = s * radius;
-		data[1] = c * radius;
-	}
+	////---------------------------------------------------
+	////polar to cartesian
+	////---------------------------------------------------
+	//void polar_to_cartesian(const DATA_TYPE& angle, const DATA_TYPE& radius)
+	//{
+	//	DATA_TYPE s,c; sgm::sincos(angle, s, c);
+	//	data[0] = s * radius;
+	//	data[1] = c * radius;
+	//}
 
-	friend SELF_TYPE polar_to_cartesian(const DATA_TYPE& angle, const DATA_TYPE& radius)
-	{
-		SELF_TYPE result;
-		result.polar_to_cartesian(angle, radius);
-		return result;
-	}
+	//friend SELF_TYPE polar_to_cartesian(const DATA_TYPE& angle, const DATA_TYPE& radius)
+	//{
+	//	SELF_TYPE result;
+	//	result.polar_to_cartesian(angle, radius);
+	//	return result;
+	//}
 
-	//---------------------------------------------------
-	//cartesian to polar
-	//---------------------------------------------------
-	void cartesian_to_polar(DATA_TYPE& angle, DATA_TYPE& radius) const
-	{
-		angle = sgm::atan2(data[1], data[0]);
-		radius = length();
-	}
+	////---------------------------------------------------
+	////cartesian to polar
+	////---------------------------------------------------
+	//void cartesian_to_polar(DATA_TYPE& angle, DATA_TYPE& radius) const
+	//{
+	//	angle = sgm::atan2(data[1], data[0]);
+	//	radius = length();
+	//}
 
-	friend void cartesian_to_polar(const SELF_TYPE& vector, DATA_TYPE& angle, DATA_TYPE& radius)
-	{
-		vector.cartesian_to_polar(angle, radius);
-	}
+	//friend void cartesian_to_polar(const SELF_TYPE& vector, DATA_TYPE& angle, DATA_TYPE& radius)
+	//{
+	//	vector.cartesian_to_polar(angle, radius);
+	//}
 
 };
 
