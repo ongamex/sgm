@@ -41,8 +41,6 @@ void TestVectors()
 	VEC_TYPE a = InitVector<VEC_TYPE>();
 	VEC_TYPE b = InitVector<VEC_TYPE>();
 
-
-
 	PRINT_VEC(a);
 	PRINT_VEC(b);
 

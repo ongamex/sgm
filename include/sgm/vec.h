@@ -39,6 +39,37 @@ struct vec2
 
 #include "vec_common.inl"
 
+	//---------------------------------------------------
+	//polar to cartesian
+	//---------------------------------------------------
+	void polar_to_cartesian(const DATA_TYPE& angle, const DATA_TYPE& radius)
+	{
+		DATA_TYPE s,c; sgm::sincos(angle, s, c);
+		data[0] = s * radius;
+		data[1] = c * radius;
+	}
+
+	friend SELF_TYPE polar_to_cartesian(const DATA_TYPE& angle, const DATA_TYPE& radius)
+	{
+		SELF_TYPE result;
+		result.polar_to_cartesian(angle, radius);
+		return result;
+	}
+
+	//---------------------------------------------------
+	//cartesian to polar
+	//---------------------------------------------------
+	void cartesian_to_polar(DATA_TYPE& angle, DATA_TYPE& radius) const
+	{
+		angle = sgm::atan2(data[1], data[0]);
+		radius = length();
+	}
+
+	friend void cartesian_to_polar(const SELF_TYPE& vector, DATA_TYPE& angle, DATA_TYPE& radius)
+	{
+		vector.cartesian_to_polar(angle, radius);
+	}
+
 };
 
 /////////////////////////////////////////////////////////////////
@@ -112,6 +143,18 @@ struct vec3
 	{
 		return v.dot(a.cross(b));
 	}
+
+	//---------------------------------------------------
+	//spherical(right-handed with z-up) to cartesian
+	//azimuth - the angle on xy plane starting form +x
+	//polar - the angle stating form +z and goes to xy plane
+	//---------------------------------------------------
+	//void spherical_to_cartesian_rh_z_up(const DATA_TYPE& azimuth, const DATA_TYPE& polar, const DATA_TYPE& radius) const
+	//{
+	//	radius = length();
+	//	azimuth = sgm::atan2(data[1], data[0]);
+	//	polar = sgm::acos(data[3] / radius);
+	//}
 };
 
 /////////////////////////////////////////////////////////////////
