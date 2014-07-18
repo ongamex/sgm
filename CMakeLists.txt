@@ -5,7 +5,6 @@ project(sgm)
 include_directories("./include")
 
 source_group("sgm" FILES
-include/sgm/sgm.h
 include/sgm/sgm_base.h
 include/sgm/trigonometry.h
 include/sgm/math_utils.h
@@ -18,7 +17,6 @@ include/sgm/quat.h
 )
 
 add_library(sgm 
-include/sgm/sgm.h
 include/sgm/sgm_base.h
 include/sgm/trigonometry.h
 include/sgm/math_utils.h
