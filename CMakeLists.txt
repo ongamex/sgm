@@ -2,7 +2,9 @@ cmake_minimum_required(VERSION 2.6)
 
 project(sgm)
 
-include_directories("./include")
+set(SGM_INCLUDE_DIR "./include")
+
+include_directories(${SGM_INCLUDE_DIR})
 
 source_group("sgm" FILES
 include/sgm/sgm_base.h
